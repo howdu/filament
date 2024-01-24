@@ -18,6 +18,11 @@ class CreateAction extends Action
 
     protected bool | Closure $canCreateAnother = true;
 
+    /**
+     * @var array<mixed> | Closure
+     */
+    protected array | Closure $fillAnotherForm = [];
+
     public static function getDefaultName(): ?string
     {
         return 'create';
@@ -100,7 +105,7 @@ class CreateAction extends Action
                 $form->model($model);
                 $livewire->mountedTableActionRecord(null);
 
-                $form->fill();
+                $form->fill($this->evaluate($this->fillAnotherForm, ['record' => $record]));
 
                 $this->halt();
 
@@ -131,5 +136,15 @@ class CreateAction extends Action
     public function canCreateAnother(): bool
     {
         return (bool) $this->evaluate($this->canCreateAnother);
+    }
+
+    /**
+     * @param  array<mixed> | Closure  $data
+     */
+    public function fillAnotherForm(array | Closure $data): static
+    {
+        $this->fillAnotherForm = $data;
+
+        return $this;
     }
 }

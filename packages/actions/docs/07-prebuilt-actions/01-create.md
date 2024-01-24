@@ -245,3 +245,14 @@ If you'd like to remove the "create another" button from the modal, you can use 
 CreateAction::make()
     ->createAnother(false)
 ```
+
+## Filling the form after creating another
+
+You may fill the form with data after creating a record and the form is filled again, using the `fillAnotherForm()` method:
+
+```php
+CreateAction::make()
+    ->fillAnotherForm(fn ($record): array => [
+        'authorId' => $record->id,
+    ])
+```

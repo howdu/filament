@@ -17,6 +17,11 @@ class CreateAction extends Action
 
     protected bool | Closure $canCreateAnother = true;
 
+    /**
+     * @var array<mixed> | Closure
+     */
+    protected array | Closure $fillAnotherForm = [];
+
     protected ?Closure $getRelationshipUsing = null;
 
     public static function getDefaultName(): ?string
@@ -82,7 +87,7 @@ class CreateAction extends Action
                 // Ensure that the form record is anonymized so that relationships aren't loaded.
                 $form->model($model);
 
-                $form->fill();
+                $form->fill($this->evaluate($this->fillAnotherForm, ['record' => $record]));
 
                 $this->halt();
 
@@ -120,6 +125,16 @@ class CreateAction extends Action
     public function canCreateAnother(): bool
     {
         return (bool) $this->evaluate($this->canCreateAnother);
+    }
+
+    /**
+     * @param  array<mixed> | Closure  $data
+     */
+    public function fillAnotherForm(array | Closure $data): static
+    {
+        $this->fillAnotherForm = $data;
+
+        return $this;
     }
 
     public function shouldClearRecordAfter(): bool
