@@ -43,6 +43,8 @@
         ) => $color !== 'gray',
     ]);
 
+    $tag = $href ? 'a' : $tag;
+
     $iconColor ??= $color;
 
     $iconClasses = \Illuminate\Support\Arr::toCssClasses([
