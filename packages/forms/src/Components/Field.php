@@ -51,7 +51,7 @@ class Field extends Component implements Contracts\HasValidationRules
     }
 
     /**
-     * @param ?string $name
+     * @param  ?string  $name
      */
     public static function make(...$arguments): static
     {
