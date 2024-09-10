@@ -48,6 +48,13 @@ class TextColumn extends Column
         return $this;
     }
 
+    public function list(bool | Closure $condition = true): static
+    {
+        $this->bulleted($condition)->listWithLineBreaks($condition);
+
+        return $this;
+    }
+
     public function bulleted(bool | Closure $condition = true): static
     {
         $this->isBulleted = $condition;
