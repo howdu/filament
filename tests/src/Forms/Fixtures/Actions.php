@@ -70,7 +70,7 @@ class Actions extends Component implements HasForms
                     ->key('test-section')
                     ->footerActions([
                         Action::make('add'),
-                    ])
+                    ]),
             ])
             ->statePath('data');
     }
