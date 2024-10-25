@@ -3,6 +3,7 @@
 namespace Filament\Tests\Forms\Fixtures;
 
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -65,6 +66,11 @@ class Actions extends Component implements HasForms
                             ->url('https://filamentphp.com'),
                         Action::make('exists'),
                     ]),
+                Section::make('Test')
+                    ->key('test-section')
+                    ->footerActions([
+                        Action::make('add'),
+                    ])
             ])
             ->statePath('data');
     }

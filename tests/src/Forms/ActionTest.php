@@ -120,3 +120,8 @@ it('can state whether a form component action exists', function () {
         ->assertFormComponentActionExists('textInput', 'exists')
         ->assertFormComponentActionDoesNotExist('textInput', 'doesNotExist');
 });
+
+it('can state whether a form layout component action exists', function () {
+    livewire(Actions::class)
+        ->assertFormComponentActionExists('test-section', 'add');
+});
