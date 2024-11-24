@@ -72,6 +72,7 @@ class PostsTable extends Component implements HasForms, Tables\Contracts\HasTabl
                     ->state('correct state'),
                 Tables\Columns\TextColumn::make('formatted_state')
                     ->formatStateUsing(fn () => 'formatted state'),
+                Tables\Columns\TextColumn::make('json_array_of_objects.*.value'),
                 Tables\Columns\TextColumn::make('extra_attributes')
                     ->extraAttributes([
                         'class' => 'text-danger-500',
@@ -93,7 +94,8 @@ class PostsTable extends Component implements HasForms, Tables\Contracts\HasTabl
                 Tables\Filters\Filter::make('is_published')
                     ->query(fn (EloquentBuilder $query) => $query->where('is_published', true)),
                 Tables\Filters\SelectFilter::make('author')
-                    ->relationship('author', 'name'),
+                    ->relationship('author', 'name')
+                    ->searchable(['name', 'email', 'job']),
                 Tables\Filters\SelectFilter::make('select_filter_attribute')
                     ->options([
                         true => 'Published',
@@ -159,6 +161,16 @@ class PostsTable extends Component implements HasForms, Tables\Contracts\HasTabl
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ReplicateAction::make()
+                    ->mutateRecordDataUsing(function (array $data): array {
+                        $data['title'] = $data['title'] . ' (Copy)';
+
+                        return $data;
+                    })
+                    ->form([
+                        TextInput::make('title')
+                            ->required(),
+                    ]),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\DeleteAction::make('groupedDelete'),
                     Tables\Actions\ForceDeleteAction::make('groupedForceDelete'),

@@ -330,7 +330,7 @@ trait CanImportRecords
                 ->action(function (): StreamedResponse {
                     $columns = $this->getImporter()::getColumns();
 
-                    $csv = Writer::createFromFileObject(new SplTempFileObject());
+                    $csv = Writer::createFromFileObject(new SplTempFileObject);
                     $csv->setOutputBOM(ByteSequence::BOM_UTF8);
 
                     if (filled($csvDelimiter = $this->getCsvDelimiter())) {
@@ -397,7 +397,7 @@ trait CanImportRecords
             $s3Adapter = Storage::disk($fileDisk)->getAdapter();
 
             invade($s3Adapter)->client->registerStreamWrapper(); /** @phpstan-ignore-line */
-            $fileS3Path = 's3://' . config("filesystems.disks.{$fileDisk}.bucket") . '/' . $filePath;
+            $fileS3Path = (string) str('s3://' . config("filesystems.disks.{$fileDisk}.bucket") . '/' . $filePath)->replace('\\', '/');
 
             $resource = fopen($fileS3Path, mode: 'r', context: stream_context_create([
                 's3' => [

@@ -173,7 +173,7 @@ trait HasRoutes
 
         $hasTenancy = $this->hasTenancy();
 
-        if ((! $tenant) && $hasTenancy) {
+        if ((! $tenant) && $hasTenancy && $this->auth()->hasUser()) {
             $tenant = Filament::getUserDefaultTenant($this->auth()->user());
         }
 
@@ -188,7 +188,7 @@ trait HasRoutes
             Filament::setTenant($tenant, isQuiet: true);
         }
 
-        $this->navigationManager = new NavigationManager();
+        $this->navigationManager = new NavigationManager;
 
         $navigation = $this->navigationManager->get();
 
