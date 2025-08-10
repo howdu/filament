@@ -71,6 +71,9 @@ class TestComponentWithSelect extends Livewire
                         'two' => 'Two',
                         'three' => 'Three',
                     ]),
+                Select::make('optional_number')
+                    ->default(null)
+                    ->options([]),
             ])
             ->statePath('data');
     }
