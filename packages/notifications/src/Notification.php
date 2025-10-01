@@ -350,6 +350,13 @@ class Notification extends ViewComponent implements Arrayable, HasEmbeddedView
             x-transition:enter-end="fi-transition-enter-end"
             x-transition:leave-start="fi-transition-leave-start"
             x-transition:leave-end="fi-transition-leave-end"
+            x-on:touchstart="handleTouchStart($event)"
+            x-on:touchmove="handleTouchMove($event)"
+            x-on:touchend="handleTouchEnd($event)"
+            x-on:mousedown="handleMouseStart($event)"
+            x-on:mousemove="handleMouseMove($event)"
+            x-on:mouseup="handleMouseEnd($event)"
+            x-on:mouseleave="handleMouseEnd($event)"
             <?= $attributes ?>
         >
             <?= generate_icon_html(
