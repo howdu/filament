@@ -2,7 +2,6 @@
 
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -147,6 +146,6 @@ it('can efficiently access values in a repeater', function (): void {
         ]);
 
     $duration = microtime(true) - $start;
-    
+
     expect($duration)->toBeLessThan(1);
 });
