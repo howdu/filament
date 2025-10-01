@@ -1,6 +1,8 @@
 <?php
 
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -110,4 +112,41 @@ it('can get the value from a parent level field with a nested field', function (
             'nestedOne.foo' => $foo = Str::random(),
         ])
         ->assertSeeText("Label {$foo}");
+});
+
+it('can efficiently access values in a repeater', function (): void {
+    $start = microtime(true);
+
+    livewire(new class extends Livewire
+    {
+        public function form(Schema $form): Schema
+        {
+            return $form
+                ->components([
+                    Repeater::make('test')
+                        ->statePath('test')
+                        ->schema([
+                            TextInput::make('foo'),
+                            TextInput::make('bar')
+                                ->label(fn (Get $get): ?string => $get('foo'))
+                                ->hint(fn (Get $get): ?string => $get('foo'))
+                                ->placeholder(fn (Get $get): ?string => $get('foo'))
+                                ->helperText(fn (Get $get): ?string => $get('foo'))
+                                ->prefix(fn (Get $get): ?string => $get('foo'))
+                                ->suffix(fn (Get $get): ?string => $get('foo')),
+                        ]),
+                ])
+                ->statePath('data');
+        }
+    })
+        ->fillForm([
+            'test' => array_map(
+                fn () => ['alpha' => 'abc'],
+                range(1, 100)
+            ),
+        ]);
+
+    $duration = microtime(true) - $start;
+    
+    expect($duration)->toBeLessThan(1);
 });
