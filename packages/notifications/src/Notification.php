@@ -34,6 +34,7 @@ use function Filament\Support\generate_icon_html;
 class Notification extends ViewComponent implements Arrayable, HasEmbeddedView
 {
     use Concerns\CanBeInline;
+    use Concerns\CanSwipeToClose;
     use Concerns\HasActions;
     use Concerns\HasBody;
     use Concerns\HasDate;
@@ -84,6 +85,7 @@ class Notification extends ViewComponent implements Arrayable, HasEmbeddedView
             'duration' => $this->getDuration(),
             'icon' => $icon,
             'iconColor' => $this->getIconColor(),
+            'swipeToClose' => $this->swipeToClose(),
             'status' => $this->getStatus(),
             'title' => $this->getTitle(),
             'view' => $this->hasView() ? $this->getView() : null,
@@ -132,6 +134,7 @@ class Notification extends ViewComponent implements Arrayable, HasEmbeddedView
         $static->icon($data['icon'] ?? $static->getIcon());
         $static->iconColor($data['iconColor'] ?? $static->getIconColor());
         $static->title($data['title'] ?? null);
+        $static->swipeToClose($data['swipeToClose'] ?? $static->hasSwipeToClose());
 
         return $static;
     }
@@ -329,6 +332,7 @@ class Notification extends ViewComponent implements Arrayable, HasEmbeddedView
         $hasDate = filled($date);
         $body = $this->getBody();
         $hasBody = filled($body);
+        $hasSwipeToClose = $this->hasSwipeToClose();
 
         $attributes = (new ComponentAttributeBag)
             ->merge([
@@ -350,13 +354,12 @@ class Notification extends ViewComponent implements Arrayable, HasEmbeddedView
             x-transition:enter-end="fi-transition-enter-end"
             x-transition:leave-start="fi-transition-leave-start"
             x-transition:leave-end="fi-transition-leave-end"
-            x-on:touchstart="handleTouchStart($event)"
-            x-on:touchmove="handleTouchMove($event)"
-            x-on:touchend="handleTouchEnd($event)"
-            x-on:mousedown="handleMouseStart($event)"
-            x-on:mousemove="handleMouseMove($event)"
-            x-on:mouseup="handleMouseEnd($event)"
-            x-on:mouseleave="handleMouseEnd($event)"
+            <?php if ($hasSwipeToClose) { ?>
+                x-on:mousedown="handleMouseStart($event)"
+                x-on:mousemove="handleMouseMove($event)"
+                x-on:mouseup="handleMouseEnd($event)"
+                x-on:mouseleave="handleMouseEnd($event)"
+            <?php } ?>
             <?= $attributes ?>
         >
             <?= generate_icon_html(
