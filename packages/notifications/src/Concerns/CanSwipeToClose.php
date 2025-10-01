@@ -18,4 +18,3 @@ trait CanSwipeToClose
         return $this->hasSwipeToClose;
     }
 }
-
